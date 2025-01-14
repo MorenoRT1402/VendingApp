@@ -20,9 +20,9 @@
                     <td>{{ product.name }}</td>
                     <td>{{ product.price|format_currency('EUR') }}</td>
                     <td>
-                        {# <a href="{{ path('app_product_show', {'id': product.id}) }}">Ver</a>
+                        <a href="{{ path('app_product_show', {'id': product.id}) }}">Ver</a>
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}">Editar</a>
-                        <a href="{{ path('app_product_delete', {'id': product.id}) }}">Borrar</a> #}
+                        <a href="{{ path('app_product_delete', {'id': product.id}) }}">Borrar</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -30,5 +30,5 @@
     </table>
 {% endif %}
 
-<a href="{{ path('create_product') }}" class="btn btn-primary">Añadir Producto</a>
+<a href="{{ path('app_product_create') }}" class="btn btn-primary">Añadir Producto</a>
 {% endblock %}
