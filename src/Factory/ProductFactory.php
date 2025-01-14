@@ -8,11 +8,15 @@ use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
+use Faker\Factory;
+use App\FakerData;
+use App\FakerData\VendingProducts;
 
 /**
  * @extends PersistentProxyObjectFactory<Product>
  */
-final class ProductFactory extends PersistentProxyObjectFactory{
+final class ProductFactory extends PersistentProxyObjectFactory
+{
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
@@ -34,11 +38,17 @@ final class ProductFactory extends PersistentProxyObjectFactory{
      */
     protected function defaults(): array|callable
     {
-        $faker = Factory::create();
+        $faker = Factory::create('es_ES');
+
+        $vendingProducts = VendingProducts::get_all();
+
+        $category = $faker->randomKey($vendingProducts);
+        $subcategory = $faker->randomKey($vendingProducts[$category]);
+        $productName = $faker->randomElement($vendingProducts[$category][$subcategory]);
 
         return [
-            'name' => $faker->productName(),
-            'price' => $faker->randomFloat(2, 1, 100),
+            'name' => $productName,
+            'price' => $faker->randomFloat(2, 0.5, 5),
         ];
     }
 

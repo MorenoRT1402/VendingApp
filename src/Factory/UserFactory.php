@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
+use Faker\Factory;
 
 /**
  * @extends PersistentProxyObjectFactory<User>
@@ -39,7 +40,7 @@ final class UserFactory extends PersistentProxyObjectFactory{
 
         return [
             'email' => $faker->email(),
-            'roles' => $faker->randomElement($userRoles),
+            'roles' => [$faker->randomElement($userRoles)],
             'password' => 'password',
         ];
     }

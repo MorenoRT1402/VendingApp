@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
+use Faker\Factory;
 
 /**
  * @extends PersistentProxyObjectFactory<Machine>
