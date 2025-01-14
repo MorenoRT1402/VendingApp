@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FakerData;
+namespace App\Factory\Params;
 
 class VendingProducts {
     public static function get_all() : array{
