@@ -5,18 +5,30 @@
 {% block body %}
     <h1>{{ newText }}</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'class': 'form-control'}}) }}
 
-        {{ form_row(form.location) }}
-        {{ form_row(form.model) }}
-        {{ form_row(form.status) }}
+        <div class="mb-3">
+            {{ form_label(form.location, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.location, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.location) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.model, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.model, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.model) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.status, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+            {{ form_errors(form.status) }}
+        </div>
 
     {{ form_end(form) }}
 
-    <a href="{{ path(indexPath) }}">Volver a la lista</a>
+    <a href="{{ path(indexPath) }}" class="btn btn-secondary mt-3">Volver a la lista</a>
 
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
+        <div class="alert alert-success mt-3">
             {{ message }}
         </div>
     {% endfor %}

@@ -24,10 +24,25 @@ final class MachineController extends AbstractController{
         $this->em = $em;
     }
 
+    private function get_data($machines) : array {
+        $data = [];
+        foreach ($machines as $machine) {
+            $data[] = [
+                'id' => $machine->getId(),
+                'location' => $machine->getLocation(),
+                'model' => $machine->getModel(),
+                'status' => $machine->getStatus()?->value,
+            ];
+        }
+        return $data;
+    }
+
     #[Route('/', name: '')]
     public function index(): Response
     {
         $machines = $this->em->getRepository(Machine::class)->findAll();
+        
+        $data = $this->get_data($machines);
 
         $fields = [
             ['name' => 'location', 'label' => 'Localización'],
@@ -36,7 +51,7 @@ final class MachineController extends AbstractController{
         ];
 
         return $this->render('_entity_list.html.twig', [
-            'entities' => $machines,
+            'entities' => $data,
             'entity_name' => self::ENTITY_NAME,
             'route_prefix' => self::ROUTE_NAME,
             'fields' => $fields,

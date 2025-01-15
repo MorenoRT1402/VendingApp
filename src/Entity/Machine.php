@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use App\Enum\MachineStatus;
 use App\Repository\MachineRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MachineRepository::class)]
@@ -21,14 +23,14 @@ class Machine
     #[ORM\Column(length: 255)]
     private ?string $model = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
-
     /**
      * @var Collection<int, Stock>
      */
     #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'machine', orphanRemoval: true)]
     private Collection $inventory;
+
+    #[ORM\Column(type: Types::STRING, enumType: MachineStatus::class)]
+    private ?MachineStatus $status = null;
 
     public function __construct()
     {
@@ -64,18 +66,6 @@ class Machine
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Stock>
      */
@@ -102,6 +92,18 @@ class Machine
                 $inventory->setMachine(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?MachineStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?MachineStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
