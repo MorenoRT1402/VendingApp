@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de Máquina{% endblock %}
+
+{% block body %}
+    <h1>Detalle de {{ machine.model }}</h1>
+
+    <dl>
+        <dt>Localización:</dt>
+        <dd>{{ machine.location }}</dd>
+
+        <dt>Modelo:</dt>
+        <dd>{{ machine.model }}</dd>
+
+        <dt>Estado:</dt>
+        <dd>{{ machine.status.value }}</dd>
+
+        <dt>Inventario:</dt>
+        <dd>
+            {% if machine.inventory is empty %}
+                Esta máquina no tiene inventario asignado.
+            {% else %}
+                <ul>
+                    {% for stockItem in machine.inventory %}
+                        <li>
+                            {{ stockItem.product.name }} (Cantidad: {{ stockItem.quantity }})
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </dd>
+    </dl>
+
+    <a href="{{ path('app_machine') }}" class="btn btn-secondary">Volver a la lista</a>
+    <button class="btn btn-warning" onclick="window.location.href='{{ path('app_machine_edit', {'id': machine.id}) }}'">Editar</button>
+{% endblock %}

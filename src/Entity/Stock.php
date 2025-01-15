@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\StockRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StockRepository::class)]
@@ -14,16 +13,16 @@ class Stock
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'inventory')]
+    #[ORM\ManyToOne(inversedBy: 'inventory', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Machine $machine = null;
 
-    #[ORM\ManyToOne(inversedBy: 'inventory')]
+    #[ORM\ManyToOne(inversedBy: 'inventory', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $quantity = null;
+    #[ORM\Column]
+    private ?int $quantity = null;
 
     public function getId(): ?int
     {
@@ -54,12 +53,12 @@ class Stock
         return $this;
     }
 
-    public function getQuantity(): ?string
+    public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    public function setQuantity(string $quantity): static
+    public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
 

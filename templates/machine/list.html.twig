@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %} {# Extiende de tu plantilla base #}
+
+{% block title %}Lista de Máquinas{% endblock %}
+
+{% block body %}
+    <h1>Lista de Máquinas</h1>
+
+    <table class="table"> {# Usa una tabla para mostrar los datos #}
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ubicación</th>
+                <th>Modelo</th>
+                <th>Estado</th>
+                <th>Acciones</th> {# Columna para las acciones (editar, borrar, etc.) #}
+            </tr>
+        </thead>
+        <tbody>
+            {% for machine in machines %} {# Itera sobre la lista de máquinas #}
+                <tr>
+                    <td>{{ machine.id }}</td>
+                    <td>{{ machine.location }}</td>
+                    <td>{{ machine.model }}</td>
+                    <td>{{ machine.status.value }}</td> {# Muestra el valor del enum #}
+                    <td>
+                        <a href="{{ path('app_machine__edit', {'id': machine.id}) }}" class="btn btn-primary btn-sm">Editar</a>
+                        {# Enlace para editar la máquina #}
+                        <a href="{{ path('app_machine__delete', {'id': machine.id}) }}" class="btn btn-danger btn-sm">Borrar</a>
+                        {# Enlace para borrar la máquina #}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No hay máquinas registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <a href="{{ path('app_machine_new') }}" class="btn btn-success">Crear Nueva Máquina</a>
+
+{% endblock %}

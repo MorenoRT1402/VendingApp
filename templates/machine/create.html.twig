@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ newText }}</h1>
+
+    {{ form_start(form) }}
+
+    <div class="mb-3">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.model) }}
+        {{ form_widget(form.model, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.model) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.status) }}
+        {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.status) }}
+    </div>
+
+    <div id="inventory-fields-list"
+         data-prototype="{{ form_widget(form.inventory.vars.prototype)|e('html_attr') }}"
+         data-index="{{ form.inventory|length }}">
+        <h3>{{ form_label(form.inventory)|default('Inventario') }}</h3>
+        {% for inventoryField in form.inventory %}
+            <div class="row mb-3 inventory-item">
+                <div class="col-6">
+                    {{ form_row(inventoryField.product) }}
+                </div>
+                <div class="col-4">
+                    {{ form_row(inventoryField.quantity) }}
+                </div>
+                <div class="col-2 text-end">
+                    <button type="button" class="btn btn-danger remove-inventory-field">Eliminar</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" class="add-another-inventory btn btn-success mt-3" data-list-add-button="collection">Añadir producto al inventario</button>
+
+    {{ form_rest(form) }}
+
+    <a href="{{ path(indexPath) }}" class="btn btn-secondary mt-3">Volver a la lista</a>
+    {{ form_end(form) }}
+
+    <script>
+        const collectionHolder = document.querySelector('#inventory-fields-list');
+
+        const addFormToCollection = () => {
+            const prototype = collectionHolder.dataset.prototype;
+            const index = collectionHolder.dataset.index;
+            let newForm = prototype;
+
+            newForm = newForm.replace(/__name__/g, index);
+
+            collectionHolder.insertAdjacentHTML('beforeend', newForm);
+
+            collectionHolder.dataset.index++;
+
+            const newItem = collectionHolder.lastElementChild;
+            addInventoryFormDeleteLink(newItem);
+        };
+
+        const addInventoryFormDeleteLink = (item) => {
+          const removeFormButton = item.querySelector('.remove-inventory-field');
+          if (removeFormButton) {
+            removeFormButton.addEventListener('click', (e) => {
+              e.preventDefault();
+              item.remove();
+            });
+          }
+        }
+
+        document.querySelector('.add-another-inventory').addEventListener('click', addFormToCollection);
+
+        document.querySelectorAll('.inventory-item').forEach(item => {
+          addInventoryFormDeleteLink(item);
+        });
+    </script>
+{% endblock %}

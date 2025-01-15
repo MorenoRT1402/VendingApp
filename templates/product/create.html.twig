@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo {{ name }}{% endblock %}
+
+{% block body %}
+    <h1>Nuevo {{ name }}</h1>
+
+    {{ form_start(form) }}
+
+        {{ form_row(form.name) }}
+        {{ form_row(form.price) }}
+
+    {{ form_end(form) }}
+
+    <a href="{{ path(indexPath) }}">Volver a la lista</a>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endblock %}

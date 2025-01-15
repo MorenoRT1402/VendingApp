@@ -9,8 +9,7 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 use Faker\Factory;
-use App\FakerData;
-use App\FakerData\VendingProducts;
+use App\Factory\Params\VendingProducts;
 
 /**
  * @extends PersistentProxyObjectFactory<Product>

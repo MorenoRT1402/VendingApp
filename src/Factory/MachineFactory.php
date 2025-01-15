@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Machine;
+use App\Enum\MachineStatus;
 use App\Repository\MachineRepository;
 use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
@@ -35,13 +36,12 @@ final class MachineFactory extends PersistentProxyObjectFactory{
      */
     protected function defaults(): array|callable
     {
-        $statusOptions = ['Active', 'Inactive', 'On Maintain'];
         $faker = Factory::create();
 
         return [
             'location' => $faker->city,
             'model' => $faker->word() . ' ' . $faker->randomNumber(3),
-            'status' => $faker->randomElement($statusOptions),
+            'status' => $faker->randomElement(MachineStatus::cases()),
         ];
     }
 
