@@ -3,7 +3,7 @@
 {% block body %}
 <h1>Lista de Productos</h1>
 
-{% if products is empty %}
+{% if entities is empty %}
     <p>No hay productos disponibles.</p>
 {% else %}
     <table>
@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for product in products %}
+            {% for product in entities %}
                 <tr>
                     <td>{{ product.name }}</td>
                     <td>{{ product.price|format_currency('EUR') }}</td>
@@ -30,5 +30,5 @@
     </table>
 {% endif %}
 
-<a href="{{ path('app_product_create') }}" class="btn btn-primary">Añadir Producto</a>
+<a href="{{ path('app_product_new') }}" class="btn btn-primary">Añadir Producto</a>
 {% endblock %}
