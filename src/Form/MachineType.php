@@ -4,10 +4,7 @@ namespace App\Form;
 
 use App\Entity\Machine;
 use App\Enum\MachineStatus;
-use App\Form\DataTransformer\StringToMachineStatusTransformer;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,8 +16,8 @@ class MachineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {       
         $builder
-        ->add('location')
         ->add('model')
+        ->add('location')
         ->add('status', EnumType::class, ['class' => MachineStatus::class])
         ->add('inventory', CollectionType::class, [
             'entry_type' => StockType::class,
@@ -29,7 +26,7 @@ class MachineType extends AbstractType
             'allow_delete' => true,
             'by_reference' => false,
             'prototype' => true,
-            'label' => 'Inventario',
+            'label' => false,
             'attr' => [
               'class' => 'collection',
             ]

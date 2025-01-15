@@ -29,8 +29,8 @@ final class MachineController extends AbstractController{
         foreach ($machines as $machine) {
             $data[] = [
                 'id' => $machine->getId(),
-                'location' => $machine->getLocation(),
                 'model' => $machine->getModel(),
+                'location' => $machine->getLocation(),
                 'status' => $machine->getStatus()?->value,
             ];
         }
@@ -45,8 +45,8 @@ final class MachineController extends AbstractController{
         $data = $this->get_data($machines);
 
         $fields = [
-            ['name' => 'location', 'label' => 'Localización'],
             ['name' => 'model', 'label' => 'Modelo'],
+            ['name' => 'location', 'label' => 'Localización'],
             ['name' => 'status', 'label' => 'Estado'],
         ];
 

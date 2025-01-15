@@ -16,13 +16,13 @@ class StockType extends AbstractType
     {
         $builder
             ->add('quantity')
-//             ->add('machine', EntityType::class, [
-//                 'class' => Machine::class,
-// 'choice_label' => 'model',
-//             ])
+//          ->add('machine', EntityType::class, [
+//              'class' => Machine::class,
+//               'choice_label' => 'model',
+//          ])
             ->add('product', EntityType::class, [
                 'class' => Product::class,
-'choice_label' => 'name',
+                'choice_label' => 'name',
             ])
         ;
     }
