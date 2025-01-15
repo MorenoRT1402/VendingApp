@@ -10,24 +10,40 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route(self::ROUTE_PREFIX, name: self::ROUTE_NAME)]
 final class MachineController extends AbstractController{
+    private const ROUTE_NAME = 'app_machine';
+    private const ENTITY_NAME = 'máquina';
+    private const PREFIX = 'machine';
+
+    private const ROUTE_PREFIX = '/' . self::PREFIX;
+    
     private $em;
 
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
     }
 
-    #[Route('/machine', name: 'app_machine')]
+    #[Route('/', name: '')]
     public function index(): Response
     {
-        $machine = $this->em->getRepository(Machine::class)->findAll();
+        $machines = $this->em->getRepository(Machine::class)->findAll();
 
-        return $this->render('machine/index.html.twig', [
-            'machine' => $machine,
+        $fields = [
+            ['name' => 'location', 'label' => 'Localización'],
+            ['name' => 'model', 'label' => 'Modelo'],
+            ['name' => 'status', 'label' => 'Estado'],
+        ];
+
+        return $this->render('_entity_list.html.twig', [
+            'entities' => $machines,
+            'entity_name' => self::ENTITY_NAME,
+            'route_prefix' => self::ROUTE_NAME,
+            'fields' => $fields,
         ]);
     }
 
-    #[Route('/machine/create', name: 'app_machine_create')]
+    #[Route('/create', name: '_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $machine = new Machine();
@@ -42,14 +58,14 @@ final class MachineController extends AbstractController{
             return $this->redirectToRoute('app_machine');
         }
 
-        return $this->render('create.html.twig', [
+        return $this->render(self::PREFIX . '/create.html.twig', [
             'form' => $form->createView(),
-            'name' => 'Máquina',
+            'newText' => 'Nueva Máquina',
             'indexPath' => 'app_machine'
         ]);
     }
 
-    #[Route('/machine/{id}', name: 'app_machine_show', methods: ['GET'])]
+    #[Route('/{id}', name: '_show', methods: ['GET'])]
     public function show(Machine $machine): Response
     {
         return $this->render('machine/show.html.twig', [
@@ -57,7 +73,7 @@ final class MachineController extends AbstractController{
         ]);
     }
 
-    #[Route('/machine/{id}/edit', name: 'app_machine_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Machine $machine): Response
     {
         $form = $this->createForm(MachineType::class, $machine);
@@ -70,16 +86,16 @@ final class MachineController extends AbstractController{
             return $this->redirectToRoute('app_machine');
         }
 
-        return $this->render('create.html.twig', [
+        return $this->render(self::PREFIX . '/create.html.twig', [
             'form' => $form->createView(),
-            'name' => 'Máquina',
+            'newText' => 'Editar Máquina',
             'indexPath' => 'app_machine',
             'title' => 'Editar Máquina',
             'button_label' => 'Guardar Cambios'
         ]);
     }
 
-    #[Route('/machine/remove/{id}', name: 'app_machine_delete')]
+    #[Route('/remove/{id}', name: '_delete')]
     public function delete(Machine $machine): Response
     {
         $this->em->remove($machine);

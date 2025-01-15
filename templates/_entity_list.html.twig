@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Listado</h1>
+
+    {% if entities is empty %}
+        <p>Esto está vacío.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    {% for field in fields %}
+                        <th>{{ field.label }}</th>
+                    {% endfor %}
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        {% for field in fields %}
+                            <td>{{ attribute(entity, field.name) }}</td>
+                        {% endfor %}
+                        <td>
+                            <button class="btn btn-primary" onclick="window.location.href='{{ path(route_prefix ~ '_show', {'id': entity.id}) }}'">Ver</button>
+                            <button class="btn btn-warning" onclick="window.location.href='{{ path(route_prefix ~ '_edit', {'id': entity.id}) }}'">Editar</button>
+                            <form method="post" action="{{ path(route_prefix ~ '_delete', {'id': entity.id}) }}" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este {{ entity_name }}?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entity.id) }}">
+                                <button class="btn btn-danger">Borrar</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <button class="btn btn-primary" onclick="window.location.href='{{ path(route_prefix ~ '_new') }}'">Añadir {{ entity_name }}</button>
+{% endblock %}

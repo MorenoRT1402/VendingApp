@@ -22,8 +22,8 @@ class Stock
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $quantity = null;
+    #[ORM\Column]
+    private ?int $quantity = null;
 
     public function getId(): ?int
     {
@@ -54,12 +54,12 @@ class Stock
         return $this;
     }
 
-    public function getQuantity(): ?string
+    public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    public function setQuantity(string $quantity): static
+    public function setQuantity(int $quantity): static
     {
         $this->quantity = $quantity;
 

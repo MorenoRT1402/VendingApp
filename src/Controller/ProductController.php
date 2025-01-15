@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-/*
 use App\Entity\Product;
 use App\Form\ProductType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/product', name: 'app_product')]
 final class ProductController extends AbstractController{
 
     private $em;
@@ -19,17 +19,25 @@ final class ProductController extends AbstractController{
         $this->em = $em;
     }
 
-    #[Route('/product', name: 'app_product')]
+    #[Route('/', name: '')]
     public function index(): Response
     {
         $products = $this->em->getRepository(Product::class)->findAll();
 
-        return $this->render('product/index.html.twig', [
-            'products' => $products,
+        $fields = [
+            ['name' => 'name', 'label' => 'Nombre'],
+            ['name' => 'price', 'label' => 'Precio'],
+        ];
+
+        return $this->render('_entity_list.html.twig', [
+            'entities' => $products,
+            'entity_name' => 'producto',
+            'route_prefix' => 'app_product',
+            'fields' => $fields,
         ]);
     }
 
-    #[Route('/product/create', name: 'app_product_create')]
+    #[Route('/create', name: '_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $product = new Product();
@@ -44,14 +52,14 @@ final class ProductController extends AbstractController{
             return $this->redirectToRoute('app_product');
         }
 
-        return $this->render('create.html.twig', [
+        return $this->render('product/create.html.twig', [
             'form' => $form->createView(),
             'name' => 'Producto',
             'indexPath' => 'app_product'
         ]);
     }
 
-    #[Route('/product/{id}', name: 'app_product_show', methods: ['GET'])]
+    #[Route('/{id}', name: '_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -59,7 +67,7 @@ final class ProductController extends AbstractController{
         ]);
     }
 
-    #[Route('/product/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -72,7 +80,7 @@ final class ProductController extends AbstractController{
             return $this->redirectToRoute('app_product');
         }
 
-        return $this->render('create.html.twig', [
+        return $this->render('product/create.html.twig', [
             'form' => $form->createView(),
             'name' => 'Producto',
             'indexPath' => 'app_product',
@@ -81,7 +89,7 @@ final class ProductController extends AbstractController{
         ]);
     }
 
-    #[Route('/product/remove/{id}', name: 'app_product_delete')]
+    #[Route('/remove/{id}', name: '_delete')]
     public function delete(Request $request, Product $product): Response
     {
         // if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
@@ -90,75 +98,5 @@ final class ProductController extends AbstractController{
         // }
 
         return $this->redirectToRoute('app_product');
-    }
-}
-*/
-
-
-use App\Entity\Product;
-use App\Form\ProductType;
-use App\Service\CrudService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
-#[Route('/product', name: 'app_product')]
-class ProductController extends AbstractController
-{
-    private CrudService $crudService;
-    private EntityManagerInterface $em;
-
-    public function __construct(CrudService $crudService, EntityManagerInterface $em)
-    {
-        $this->crudService = $crudService;
-        $this->em = $em;
-    }
-
-    #[Route('/', name: '_index', methods: ['GET'])]
-    public function index(): Response
-    {
-        return $this->crudService->list(Product::class, 'product/index.html.twig');
-    }
-
-    #[Route('/new', name: '_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
-        return $this->crudService->new($request, Product::class, ProductType::class, 'app_product_index');
-    }
-
-    #[Route('/{id}', name: '_show', methods: ['GET'])]
-    public function show(Product $product): Response
-    {
-        return $this->crudService->show(Product::class, $product->getId(), 'product/show.html.twig');
-    }
-
-    #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product): Response
-    {
-        return $this->crudService->edit($request, $product, ProductType::class, 'app_product_index');
-    }
-
-    // #[Route('/{id}', name: '_delete')]
-    // public function delete(Request $request, Product $product): Response
-    // {
-    //     // $this->crudService->delete($request, $product, 'app_product_index');
-    //     // $em = $this->em->remove($product);
-    //     $this->em->remove($product);
-    //     $this->addFlash('success', 'Producto eliminado correctamente.');
-
-    //     return $this->redirectToRoute('app_product_index');
-    // }
-
-    #[Route('/{id}/remove', name: '_delete')]
-    public function delete(Request $request, Product $product): Response
-    {
-        // if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
-            $this->em->remove($product);
-            $this->em->flush();
-        // }
-
-        return $this->redirectToRoute('app_product_index');
     }
 }

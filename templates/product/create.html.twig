@@ -12,7 +12,7 @@
 
     {{ form_end(form) }}
 
-    {# <a href="{{ path(indexPath) }}">Volver a la lista</a> #}
+    <a href="{{ path(indexPath) }}">Volver a la lista</a>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
