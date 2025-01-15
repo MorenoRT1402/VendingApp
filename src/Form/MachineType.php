@@ -8,6 +8,7 @@ use App\Form\DataTransformer\StringToMachineStatusTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +22,18 @@ class MachineType extends AbstractType
         ->add('location')
         ->add('model')
         ->add('status', EnumType::class, ['class' => MachineStatus::class])
+        ->add('inventory', CollectionType::class, [
+            'entry_type' => StockType::class,
+            'entry_options' => ['label' => false],
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+            'prototype' => true,
+            'label' => 'Inventario',
+            'attr' => [
+              'class' => 'collection',
+            ]
+        ])
         ->add('Guardar', SubmitType::class)
         ;
     }

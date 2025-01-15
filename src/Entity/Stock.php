@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\StockRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StockRepository::class)]
@@ -14,11 +13,11 @@ class Stock
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'inventory')]
+    #[ORM\ManyToOne(inversedBy: 'inventory', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Machine $machine = null;
 
-    #[ORM\ManyToOne(inversedBy: 'inventory')]
+    #[ORM\ManyToOne(inversedBy: 'inventory', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 

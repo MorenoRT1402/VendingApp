@@ -26,7 +26,7 @@ class Machine
     /**
      * @var Collection<int, Stock>
      */
-    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'machine', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'machine', cascade: ['persist'], orphanRemoval: true)]
     private Collection $inventory;
 
     #[ORM\Column(type: Types::STRING, enumType: MachineStatus::class)]
