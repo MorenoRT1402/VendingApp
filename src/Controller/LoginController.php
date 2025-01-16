@@ -28,4 +28,7 @@ final class LoginController extends AbstractController{
             'error'         => $error,
         ]);
     }
+
+    #[Route('/logout', name: '_logout')]
+    public function logout(): void {}
 }
