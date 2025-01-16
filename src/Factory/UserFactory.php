@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\User;
+use App\Enum\UserRoles;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
@@ -35,7 +36,7 @@ final class UserFactory extends PersistentProxyObjectFactory{
      */
     protected function defaults(): array|callable
     {
-        $userRoles = ['User'];
+        $userRoles = [UserRoles::User->value];
         $faker = Factory::create();
 
         return [
