@@ -35,7 +35,7 @@ final class UserController extends AbstractController{
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $user->setRoles([UserRoles::User->value]);
+            $user->setRoles([UserRoles::USER->value]);
             $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
 
             $this->em->persist($user);

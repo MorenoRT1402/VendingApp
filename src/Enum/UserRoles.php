@@ -3,5 +3,6 @@
 namespace App\Enum;
 
 enum UserRoles :string{
-    case User = 'ROLE_USER';
+    case USER = 'ROLE_USER';
+    case ADMIN = 'ROLE_ADMIN';
 }

@@ -10,18 +10,23 @@ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @extends PersistentProxyObjectFactory<User>
  */
 final class UserFactory extends PersistentProxyObjectFactory{
+
+    private UserPasswordHasherInterface $passwordHasher;
+
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
      * @todo inject services if required
      */
-    public function __construct()
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
+        $this->passwordHasher = $passwordHasher;
     }
 
     public static function class(): string
@@ -36,13 +41,14 @@ final class UserFactory extends PersistentProxyObjectFactory{
      */
     protected function defaults(): array|callable
     {
-        $userRoles = [UserRoles::User->value];
+        $userRoles = [UserRoles::USER->value];
         $faker = Factory::create();
+        $password = self::faker()->password();
 
         return [
             'email' => $faker->email(),
             'roles' => [$faker->randomElement($userRoles)],
-            'password' => 'password',
+            'password' => $this->passwordHasher->hashPassword(new User(), $password),
         ];
     }
 
