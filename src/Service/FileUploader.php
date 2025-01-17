@@ -4,6 +4,8 @@ namespace App\Service;
 
 use Exception;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -13,7 +15,8 @@ class FileUploader
     private string $targetDirectory;
     private SluggerInterface $slugger;
 
-    public function __construct(#[Autowire('%kernel.project_dir%/public/uploads/images')] string $targetDirectory, SluggerInterface $slugger)
+    public function __construct(#[Autowire('%kernel.project_dir%/public/uploads/images')] string $targetDirectory, SluggerInterface $slugger, 
+    private ParameterBagInterface $params, private Filesystem $fileSystem)
     {
         $this->targetDirectory = $targetDirectory;
         $this->slugger = $slugger;
@@ -32,6 +35,12 @@ class FileUploader
         }
 
         return $fileName;
+    }
+
+    public function delete(string $fileName){
+        $path = $this->params->get('app.uploads_directory') . '/' . $fileName;
+
+        $this->fileSystem->remove($path);
     }
 
     public function getTargetDirectory(): string

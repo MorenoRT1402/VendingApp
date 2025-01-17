@@ -93,6 +93,10 @@ final class ProductController extends AbstractController{
     public function delete(Request $request, Product $product): Response
     {
         // if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            $image = $product->getImage();
+            if($image)
+                $this->fileUploader->delete($image);
+
             $this->em->remove($product);
             $this->em->flush();
         // }
