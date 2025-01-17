@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nuevo {{ name }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-    <h1>Nuevo {{ name }}</h1>
+    <h1>{{ title }}</h1>
 
     {{ form_start(form) }}
 
         {{ form_row(form.name) }}
         {{ form_row(form.price) }}
+        {{ form_row(form.imageFile) }}
 
     {{ form_end(form) }}
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +14,40 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/product', name: 'app_product')]
 final class ProductController extends AbstractController{
 
-    private $em;
+    private EntityManagerInterface $em;
+    private FileUploader $fileUploader;
 
-    public function __construct(EntityManagerInterface $em) {
+    public function __construct(EntityManagerInterface $em, FileUploader $fileUploader)
+    {
         $this->em = $em;
+        $this->fileUploader = $fileUploader;
+    }
+
+    function handleForm(Product $product, Request $request) {
+        $form = $this->createForm(ProductType::class, $product);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('imageFile')->getData();
+
+            if ($file) {
+                $newFilename = $this->fileUploader->upload($file);
+                $product->setImage($newFilename);
+            }
+
+            $this->em->persist($product);
+            $this->em->flush();
+
+            return $this->redirectToRoute('app_product');
+        }
+
+        return $this->render('product/create.html.twig', [
+            'form' => $form->createView(),
+            'indexPath' => 'app_product',
+            'title' => 'Editar Producto',
+            // 'button_label' => 'Guardar Cambios'
+        ]);
     }
 
     #[Route('/', name: '')]
@@ -38,25 +69,10 @@ final class ProductController extends AbstractController{
     }
 
     #[Route('/create', name: '_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
         $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($product);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_product');
-        }
-
-        return $this->render('product/create.html.twig', [
-            'form' => $form->createView(),
-            'name' => 'Producto',
-            'indexPath' => 'app_product'
-        ]);
+        return $this->handleForm($product, $request);
     }
 
     #[Route('/{id}', name: '_show', methods: ['GET'])]
@@ -68,25 +84,9 @@ final class ProductController extends AbstractController{
     }
 
     #[Route('/{id}/edit', name: '_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product): Response
+    public function edit(Request $request, Product $product, FileUploader $fileUploader): Response
     {
-        $form = $this->createForm(ProductType::class, $product);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
-
-            return $this->redirectToRoute('app_product');
-        }
-
-        return $this->render('product/create.html.twig', [
-            'form' => $form->createView(),
-            'name' => 'Producto',
-            'indexPath' => 'app_product',
-            'title' => 'Editar Producto',
-            'button_label' => 'Guardar Cambios'
-        ]);
+        return $this->handleForm($product, $request);
     }
 
     #[Route('/remove/{id}', name: '_delete')]

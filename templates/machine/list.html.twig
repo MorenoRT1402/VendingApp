@@ -1,41 +1,45 @@
-{% extends 'base.html.twig' %} {# Extiende de tu plantilla base #}
-
-{% block title %}Lista de Máquinas{% endblock %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Lista de Máquinas</h1>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Listado</h1>
 
-    <table class="table"> {# Usa una tabla para mostrar los datos #}
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Ubicación</th>
-                <th>Modelo</th>
-                <th>Estado</th>
-                <th>Acciones</th> {# Columna para las acciones (editar, borrar, etc.) #}
-            </tr>
-        </thead>
-        <tbody>
-            {% for machine in machines %} {# Itera sobre la lista de máquinas #}
-                <tr>
-                    <td>{{ machine.id }}</td>
-                    <td>{{ machine.location }}</td>
-                    <td>{{ machine.model }}</td>
-                    <td>{{ machine.status.value }}</td> {# Muestra el valor del enum #}
-                    <td>
-                        <a href="{{ path('app_machine__edit', {'id': machine.id}) }}" class="btn btn-primary btn-sm">Editar</a>
-                        {# Enlace para editar la máquina #}
-                        <a href="{{ path('app_machine__delete', {'id': machine.id}) }}" class="btn btn-danger btn-sm">Borrar</a>
-                        {# Enlace para borrar la máquina #}
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="5">No hay máquinas registradas.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-        <a href="{{ path('app_machine_new') }}" class="btn btn-success">Crear Nueva Máquina</a>
+    {% if machines is empty %}
+        <p class="text-center">No hay máquinas registradas.</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">ID</th>
+                        <th scope="col">Ubicación</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for machine in machines %}
+                        <tr>
+                            <td>{{ machine.id }}</td>
+                            <td>{{ machine.location }}</td>
+                            <td>{{ machine.model }}</td>
+                            <td>{{ machine.status.value }}</td>
+                            <td class="text-center align-middle">
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ path('app_machine__edit', {'id': machine.id}) }}" class="btn btn-primary btn-sm mx-1">Editar</a>
+                                    <a href="{{ path('app_machine__delete', {'id': machine.id}) }}" class="btn btn-danger btn-sm mx-1">Borrar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 
+    <div class="d-flex justify-content-center mt-3 mb-4">
+        <a href="{{ path('app_machine__new') }}" class="btn btn-primary">Añadir Máquina</a>
+    </div>
+</div>
 {% endblock %}

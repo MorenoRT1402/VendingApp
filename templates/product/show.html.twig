@@ -3,9 +3,27 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <h1>{{ product.name }}</h1>
+    <div class="container mt-4">
+        <div class="card">
+            {% if product.image %}
+                <div class="text-center">
+                    <img src="{{ asset('uploads/images/' ~ product.image) }}" class="card-img-top img-fluid" alt="{{ product.name }}" style="max-height: 300px; object-fit: contain;">
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h2 class="card-title text-center mb-3">{{ product.name }}</h2>
+                <p class="card-text text-center">Precio: {{ product.price|format_currency('EUR') }}</p>
 
-    <p>Precio: {{ product.price|format_currency('EUR') }}</p>
+                <div class="d-grid gap-2">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-warning">Editar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
-    <a href="{{ path('app_product') }}">Volver a la lista</a>
+        <div class="d-grid mt-3">
+            <a href="{{ path('app_product') }}" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+    </div>
 {% endblock %}
