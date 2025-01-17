@@ -1,7 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>{{ newText }}</h1>
+    <div class="container mt-4">
+        <h1>{{ newText }}</h1>
 
-    {{form(form)}}
+        <div class="card bg-light shadow p-4">
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'novalidate': true}}) }}
+
+                <div class="mb-3">
+                    {{ form_label(form.email, 'Correo electrónico', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.email, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.password, 'Contraseña', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.password, {'attr': {'class': 'text-danger'}}) }}
+                </div>
+
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary w-100 mt-3'}}) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

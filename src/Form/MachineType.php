@@ -31,7 +31,7 @@ class MachineType extends AbstractType
               'class' => 'collection',
             ]
         ])
-        // ->add('Guardar', SubmitType::class)
+        ->add('submit', SubmitType::class, ['label' => 'Guardar'])
         ;
     }
 

@@ -36,7 +36,7 @@ class ProductType extends AbstractType
                 ],
             ])            
             ->add('price')
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, ['label' => 'Guardar'])
         ;
     }
 
