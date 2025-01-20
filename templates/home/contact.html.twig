@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white text-center">
+            <h1 class="mb-0">Contact Information</h1>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center">
+                    <img src="{{ asset('uploads/images/vending_machine.jpeg') }}"" class="rounded-circle img-fluid mb-3" alt="Contact Icon" style="max-height: 200px;">
+                </div>
+                <!-- Contact Details -->
+                <div class="col-md-8">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Name:</strong> {{ contactInfo.name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Email:</strong> 
+                            <a href="mailto:{{ contactInfo.email }}" class="text-decoration-none">{{ contactInfo.email }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>GitHub:</strong> 
+                            <a href="https://github.com/{{ contactInfo.github }}" target="_blank" class="text-decoration-none">github.com/{{ contactInfo.github }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>LinkedIn:</strong> 
+                            <a href="https://linkedin.com/in/{{ contactInfo.linkedin }}" target="_blank" class="text-decoration-none">linkedin.com/in/{{ contactInfo.linkedin }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Phone:</strong> 
+                            <a href="tel:{{ contactInfo.phone }}" class="text-decoration-none">{{ contactInfo.phone }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center bg-light">
+            <p class="mb-0">
+                Feel free to reach out via email or connect on LinkedIn!
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

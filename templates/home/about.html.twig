@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About Us{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>{{ companyInfo.name }}</h1>
+        <p>{{ companyInfo.description }}</p>
+
+        <h2>Our Values</h2>
+        <ul>
+            {% for value in companyInfo.values %}
+                <li>{{ value }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
