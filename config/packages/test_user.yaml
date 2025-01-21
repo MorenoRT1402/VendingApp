@@ -1,0 +1,6 @@
+parameters:
+    test_user:
+        email: admin@example.com
+        password: admin
+        roles: ['ROLE_ADMIN']
+        name: 'Admin'
