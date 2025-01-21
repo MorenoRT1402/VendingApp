@@ -2,26 +2,36 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\StockRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StockRepository::class)]
+// #[ApiResource(
+//     security: "is_granted('ROLE_ADMIN')",
+//     normalizationContext: ['groups' => ['stock:read']]
+//     )]
 class Stock
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['stock:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'inventory', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['stock:read'])]
     private ?Machine $machine = null;
 
     #[ORM\ManyToOne(inversedBy: 'inventory', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['stock:read'])]
     private ?Product $product = null;
 
     #[ORM\Column]
+    #[Groups(['stock:read', 'stock:write'])]
     private ?int $quantity = null;
 
     public function getId(): ?int
