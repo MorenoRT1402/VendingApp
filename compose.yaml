@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile
     # volumes:
     #   - ./:/var/www/html
-    ports:
-      - "8001:80"
+    # ports:
+    #   - "8001:80"
     depends_on:
       - database
     environment:
