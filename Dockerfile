@@ -4,7 +4,7 @@ WORKDIR /var/www/html
 
 # Instalar dependencias del sistema y de PHP
 RUN apk update \
-    && apk add --no-cache $PHPIZE_DEPS git zip unzip libzip-dev libpng-dev libjpeg-turbo-dev freetype-dev icu-dev \
+    && apk add --no-cache $PHPIZE_DEPS git zip unzip libzip-dev libpng-dev libjpeg-turbo-dev freetype-dev icu-dev mysql-client \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd intl pdo pdo_mysql zip
 
@@ -17,13 +17,14 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/local/bin/composer
 # Copiar código de la aplicación
 COPY . .
 
-# Instalar dependencias de Composer SIN los scripts
-RUN composer install --no-interaction --no-dev --optimize-autoloader --prefer-dist --no-scripts
+# Instalar dependencias de Composer (AHORA CON LOS SCRIPTS)
+RUN composer install --no-interaction --no-dev --optimize-autoloader --prefer-dist
 
-# Limpiar caché de Composer
+# Cambiar la propiedad y permisos del directorio var (DESPUÉS DE LA INSTALACIÓN DE COMPOSER)
+RUN chown -R www-data:www-data /var/www/html/var
+RUN chmod -R g+w /var/www/html/var
+
+# Limpiar caché de Composer (opcional, pero buena práctica)
 RUN composer clear-cache
-
-# Establecer permisos
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/config
 
 EXPOSE 80
